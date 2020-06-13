@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:ctx="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+	<ctx:annotation-config></ctx:annotation-config>
+	<ctx:component-scan base-package="com.*"></ctx:component-scan>
+	
+	<bean id="user" class="com.models.User" scope="session">     
+      <aop:scoped-proxy/>
+  </bean>
+	
+	<bean id="r" class="com.webDAO.loginDAO" />
+	<bean id="staffbean" class="com.webDAO.StaffDAO" />
+	<bean id="complaintbean" class="com.webDAO.ComplaintDAO" />
+	<bean id="menubean" class="com.webDAO.MenuDAO" />
+	<bean id="orderbean" class="com.webDAO.OrderDAO" />
+	<bean id="customerbean" class="com.webDAO.CustomerDAO" />
+	<bean id="reviewbean" class="com.webDAO.ReviewDAO" />
+	<bean id="reportbean" class="com.webDAO.ReportDAO" />
+	<bean id="login_service" class="com.services.loginservices" />
+	<bean id="complaint_service" class="com.services.ComplaintService" />
+	<bean id="menu_service" class="com.services.MenuService" />
+	<bean id="order_service" class="com.services.OrderService" />
+	<bean id="review_service" class="com.services.ReviewService" />
+	<bean id="customer_service" class="com.services.CustomerService" />
+	<bean id="report_service" class="com.services.ReportService" />
+	<bean id="rst" class="com.models.Restaurant" />
+	<bean id="inventory" class="com.models.Inventory" />
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="datasource" />
+	</bean>
+
+	<!-- the DataSource (parameterized for configuration via a PropertyPlaceHolderConfigurer) -->
+	<bean id="datasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<property name="url"
+			value="jdbc:sqlserver://localhost:1433;databaseName=ooad" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<mvc:resources mapping="/resources/**"
+		location="/resources/" cache-period="31556926" />
+
+	<mvc:annotation-driven />
+</beans>
