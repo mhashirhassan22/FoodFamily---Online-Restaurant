@@ -1,5 +1,12 @@
+********************************************___INTRODUCTION___***************************************************
+      Food Family is a smart restaurant management system. The restaurant owner can add the staff with specific permissions. 
+      The staff can manage menus, deals, orders, and generate reports. Customers can view the menu, order from the restaurant, 
+      and contact the restaurant or website support. Food Family also has additional features like loyalty programs.
+
 Note: This project was built using springMVC in eclipse as maven project
 
+
+********************************************___Setup___***************************************************
 1)Download eclipse, maven (springMVC tools) and tomcat server 8.0 or 8.5.
 2)Download MS SQl for sql management.
 3)First of all import the project in to eclipse from file system as existing MAVEN project.
