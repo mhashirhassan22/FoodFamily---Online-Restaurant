@@ -1,0 +1,21 @@
+Note: This project was built using springMVC in eclipse as maven project
+
+1)Download eclipse, maven (springMVC tools) and tomcat server 8.0 or 8.5.
+2)Download MS SQl for sql management.
+3)First of all import the project in to eclipse from file system as existing MAVEN project.
+4)Now connect it with server (Tomcat 8.0 or 8.5). Go to the properties of the project select targeted runtime then tomcat.
+5)Integrate your project so that it runs static files i.e. css/javascript. 
+For that go to (project properties)->(Deployment assembly)->(/src/main/java)->Add->(Java Build Path Entries)->Select Maven Dependencies->finish
+Before 5. Please make sure to maven clean + maven update the projec
+
+
+Setting Up Database:
+1)Open MS SQL Create a database with the name OOAD.
+2)Create a user and password. Go to src/main/webapp/WEB-INF/my-servlet.xml in the datasource change the username, password and database name
+to your respective username and database.
+3)Open SQL server Configuration Manager and set default port for db to 1433.
+
+HOW TO RUN THE PROJECT?
+1) left Click on project -> Run as -> Run on Server
+This will deploy the website on your default browser
+
