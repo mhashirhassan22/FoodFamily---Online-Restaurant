@@ -1,0 +1,165 @@
+create database ooad
+use ooad
+drop database ooad
+
+
+create table permission(
+permission_id int IDENTITY(1,1) PRIMARY KEY,
+permission_model nvarchar(10) UNIQUE,
+constraint check_role check (permission_model='owner' or permission_model='salesman' or permission_model='customer' or permission_model='admin')
+)
+
+insert into permission values('admin')
+insert into permission values('owner')
+insert into permission values('salesman')
+insert into permission values('customer')
+
+Create Table users(
+    id int IDENTITY(1,1) PRIMARY KEY,
+	fname nvarchar(30) not null,
+	lname nvarchar(30) not null,
+	email nvarchar(50) UNIQUE,
+	pwd nvarchar(50) not null, 
+	username nvarchar(40) UNIQUE,
+	contactNo nvarchar(40) not null,
+)
+
+Create Table customer
+(
+    customer_id int IDENTITY(1,1) PRIMARY KEY,
+	customer_fname nvarchar(30) not null,
+	customer_lname nvarchar(30) not null,
+	customer_email nvarchar(50) UNIQUE,
+	customer_password nvarchar(50) not null, 
+	customer_username nvarchar(40) UNIQUE,
+	customer_contactNo nvarchar(40) not null,
+	permission nvarchar(10) foreign key references permission(permission_model) default 'customer',
+)
+
+Create Table admins
+(
+    admin_id int IDENTITY(1,1) PRIMARY KEY,
+	admin_fname nvarchar(30) not null,
+	admin_lname nvarchar(30) not null,
+	admin_email nvarchar(50) UNIQUE,
+	admin_password nvarchar(30) not null, 
+	admin_username nvarchar(40) UNIQUE,
+	admin_contactNo nvarchar(40) not null,
+	permission nvarchar(10) foreign key references permission(permission_model) default 'admins',
+)
+Create Table restaurant_owner
+(
+    owner_id int IDENTITY(1,1) PRIMARY KEY,
+	owner_fname nvarchar(30) not null,
+	owner_lname nvarchar(30) not null,
+	owner_email nvarchar(50) UNIQUE,
+	owner_password nvarchar(50) not null, 
+	owner_username nvarchar(40) UNIQUE,
+	owner_contactNo nvarchar(40) not null,
+	permission nvarchar(10) foreign key references permission(permission_model) default 'owner',
+)
+Create Table salesman	
+(
+     salesman_id int IDENTITY(1,1) PRIMARY KEY,
+	 salesman_fname nvarchar(30) not null,
+	 salesman_lname nvarchar(30) not null,
+	 salesman_email nvarchar(50) UNIQUE,
+	 salesman_password nvarchar(30) not null, 
+	 salesman_username nvarchar(40) UNIQUE,
+	 salesman_contactNo nvarchar(40) not null,
+	 salesman_salary int,
+	permission nvarchar(10) foreign key references permission(permission_model) default 'salesman',
+)
+Create Table Restaurant
+(
+   rst_ID int IDENTITY(1,1) PRIMARY KEY,
+   rst_Name nvarchar(50) Not NULL,
+   rst_address nvarchar(60) Not Null,
+   owner_id int Foreign key references restaurant_owner(owner_id),
+)
+
+Create Table food(
+	food_id int IDENTITY(1,1) PRIMARY KEY,
+	food_name nvarchar(30),
+	food_quantity int,
+	food_cost int,
+	food_price int	--selling price
+)
+
+Create Table deal(
+	deal_id int IDENTITY(1,1) PRIMARY KEY,
+	deal_name nvarchar(20),
+	deal_price int,
+)
+
+
+Create Table deal_items(
+	deal_items_id int IDENTITY(1,1) PRIMARY KEY,
+	deal_id INT FOREIGN KEY REFERENCES deal(deal_id),
+	food_id INT FOREIGN KEY REFERENCES food(food_id)
+)
+Create Table orders(
+   	order_id int IDENTITY(1,1) PRIMARY KEY,
+	order_price int,
+	order_discount int,
+	order_is_ready bit,
+	date_created date default getdate(),
+	order_customer int Foreign key references customer(customer_id)
+)
+--insert into orders values(0,0,0,getdate(),1);
+--SELECT order_id FROM orders  WHERE order_customer = 2
+Create Table LoyaltyProgram
+(
+    customerid int primary key Foreign key references customer(customer_id),
+	points int,
+)
+create table order_items(
+	order_id int foreign key references orders(order_id) ON DELETE CASCADE,
+	food_id int foreign key references food(food_id) DEFAULT null,
+	deal_id int foreign key references deal(deal_id) DEFAULT null
+)
+Create Table review(
+	customer_id int foreign key references customer(customer_id), --who made this review
+	stars INT,
+    review_desc NVARCHAR(500),
+	check(stars>=0 and stars<=5)
+)
+
+Create Table contact(
+	customer_id int foreign key references customer(customer_id), --who sent the msg so we can contact that customer
+	msg NVARCHAR(800),
+	for_support BIT,	--1 means message for support (admins) otherwise for restaurant owner
+	is_resolved BIT,
+	date_created date default getdate(),
+)
+Create Table report(
+	salesman_id int foreign key references salesman(salesman_id),	--who generated this report
+	report_period NVARCHAR(20),
+	total_sale INT,
+	date_created date,
+	net_profit INT,
+	no_of_sales INT,
+	primary key(salesman_id,report_period,date_created)
+)
+
+select * from admins
+select * from contact
+select * from customer
+select * from Deal
+select * from deal_items
+select * from food
+select * from LoyaltyProgram
+select * from  orders
+select * from order_items
+select * from Report
+select * from Restaurant
+select * from restaurant_owner
+select * from Review
+select * from salesman
+select * from permission
+Select order_price from orders where order_id=2
+
+select * from food join order_items as OT on food.food_id=OT.food_id join orders on orders.order_id=OT.order_id
+select * from orders
+delete from orders
+insert into LoyaltyProgram values(15,11)
